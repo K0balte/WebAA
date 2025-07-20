@@ -1,80 +1,114 @@
-# 🎉 JavaFX Welcome App
+# 🧠 Puissance 6 – API REST (NestJS)
 
-Une application JavaFX simple qui affiche un message de bienvenue via une interface FXML.
-
----
-
-## Objectif
-
-Ce projet est une démonstration d’une **architecture JavaFX propre** avec :
-- une **vue FXML**
-- un **contrôleur séparé**
-- une structure prête pour Maven
+Une API backend construite avec **NestJS** pour gérer le jeu **Puissance 6** (variante du célèbre Puissance 4).  
+Deux joueurs s'affrontent en plaçant **3 pions par tour**, et le premier à aligner **6 pions** remporte la partie.
 
 ---
 
-##  Aperçu
+## 🎮 Règles du jeu
 
-> Un bouton dans l'interface déclenche l'affichage du message :
-> **"Bienvenue dans l'application JavaFX!"**
+- Plateau carré (10x10 par défaut)
+- Deux joueurs : `X` et `O`
+- Chaque joueur joue **3 coups par tour**
+- Le premier joueur à aligner **6 pions** horizontalement, verticalement ou en diagonale gagne
 
 ---
 
-## Structure du projet
+## 🧱 Structure technique
+
+- **Framework :** [NestJS](https://nestjs.com/)
+- **Langage :** TypeScript
+- **Stockage :** en mémoire (`Map<string, Game>`)
+- **Type d'API :** RESTful
+
+---
+
+## 🚀 Endpoints API
+
+| Méthode | Endpoint             | Description                            |
+|--------:|----------------------|----------------------------------------|
+| `POST`  | `/games`             | Crée une nouvelle partie               |
+| `GET`   | `/games/:id`         | Récupère l'état d'une partie           |
+| `POST`  | `/games/:id/play`    | Envoie un tour de 3 coups              |
+
+### Exemple de `POST /games/:id/play`
+
+```json
+{
+  "player": "X",
+  "positions": [
+    { "row": 2, "col": 3 },
+    { "row": 2, "col": 4 },
+    { "row": 2, "col": 5 }
+  ]
+}
+```
+
+---
+
+## 📂 Arborescence
 
 ```
-P6JavaFXApp/
-├── pom.xml
-├── README.md
-└── src/
-    └── main/
-        ├── java/
-        │   └── com/example/p6webarchi/
-        │       ├── WelcomeApplication.java
-        │       └── WelcomeController.java
-        └── resources/
-            └── welcome-view.fxml
+src/
+├── app.module.ts
+└── game/
+    ├── controllers/
+    │   └── game.controller.ts
+    ├── services/
+    │   └── game.service.ts
+    ├── dto/
+    │   └── play-move.dto.ts
+    ├── entities/
+    │   └── game.entity.ts
+    └── game.module.ts
 ```
 
 ---
 
-## Lancer l'application
+## 🛠️ Installation & exécution
 
 ### Prérequis
-- Java 17+
-- Maven
 
-### Commande
+- Node.js >= 18
+- npm ou yarn
+
+### Étapes
 
 ```bash
-mvn clean javafx:run
+# Installation des dépendances
+npm install
+
+# Lancer le serveur
+npm run start
+```
+
+Par défaut, le serveur écoute sur `http://localhost:3000`.
+
+---
+
+## 🧪 Test rapide avec curl
+
+```bash
+# Créer une partie
+curl -X POST http://localhost:3000/games
+
+# Jouer un tour
+curl -X POST http://localhost:3000/games/<id>/play \
+  -H "Content-Type: application/json" \
+  -d '{"player":"X","positions":[{"row":0,"col":0},{"row":0,"col":1},{"row":0,"col":2}]}'
 ```
 
 ---
 
-## Fonctionnalités
+## 🧠 Fonctionnalités à venir
 
-- Application JavaFX légère et réactive
-- Séparation modèle / vue / contrôleur
-- Facilement extensible
-
----
-
-## Technologies utilisées
-
-- Java 17
-- JavaFX 17
-- Maven
-- FXML
+- Ajout d’une IA (joueur bot)
+- Support WebSocket temps réel
+- Interface graphique (Angular/React)
+- Historique des coups
 
 ---
 
-## Auteur
+## 📘 Licence
 
-> Ce projet a été adapté et personnalisé à des fins pédagogiques.
-
----
-
-## Licence
-
-Ce projet est distribué sans garantie et à but éducatif.
+Projet éducatif. Utilisation libre avec attribution.
